@@ -6,8 +6,15 @@ td.calendar-day:hover	{ background:#AB1717; }
 td.calendar-day-np	{ background:#eee; min-height:80px; } * html div.calendar-day-np { height:80px; }
 td.calendar-day-head { background:#C70000; font-weight:bold; text-align:center; width:120px; padding:5px; border-bottom:1px solid #999; border-top:1px solid #999; border-right:1px solid #999; }
 td.calendar-day-weekends { background:#286308; font-weight:bold; text-align:center; width:120px; padding:5px; border-bottom:1px solid #999; border-top:1px solid #999; border-right:1px solid #999; }
-div.day-number		{ background:#999; padding:6px; color:#000; font-weight:bold; float:right; margin:-5px -5px 0 0; width:20px; text-align:center; font-size:200%; }
+div.day-number		{ background:#BBBBBB; padding:1px; color:#000; font-weight:bold; float:right; margin:-5px -5px 0 0; width:20px; text-align:center; font-size:200%; border-top:1px solid #999; border-right:1px solid #999;   }
+div.day-number:hover {background: #1EFB00;}
+a:link {
+    text-decoration: none;
+    color:#000;
+}
+a:visited {
+    color: #000;}
 /* shared */
 td.calendar-day, td.calendar-day-np { width:120px; padding:5px; border-bottom:1px solid #999; border-right:1px solid #999; }
-td.calendar-day-today {background: #00FF12;}
+div.today { color: red !important; }
 	

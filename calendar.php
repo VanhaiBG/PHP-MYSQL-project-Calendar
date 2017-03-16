@@ -35,7 +35,8 @@ function draw_calendar($month,$year){
 	for($list_day = 1; $list_day <= $days_in_month; $list_day++):
 		$calendar.= '<td  class="calendar-day">';
 			/* add in the day number */
-			$calendar.= '<div class="day-number">'.$list_day.'</div>';
+			$calendar.= '<div class="day-number"><a href="events.php">'.$list_day.'</a></div>';
+			
 			
 
 			/** QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
@@ -61,25 +62,67 @@ function draw_calendar($month,$year){
 		endfor;
 	endif;
 
+
 	/* final row */
 	$calendar.= '</tr>';
 
 	/* end the table */
 	$calendar.= '</table>';
+
 	
 	/* all done, return result */
 	return $calendar;
 }
-for($list_day = 1; $list_day <= $days_in_month; $list_day++): 
-	if($list_day == $today && $month == $nowmonth && $year == $nowyear) {
-	  $calendar.= '';
-	  } else {
-		$calendar.= '';
-		}
-			/* add in the day number */
-		$calendar.= ''.$list_day.'';
-	return $calendar;
+
+////////
+
+function random_number() {
+	srand(time());
+	return (rand() % 7);
+}
 
 
-echo '<h2>March 2017</h2>';
-echo draw_calendar(3,2017);
+/* date settings */
+$month = (int) (!empty($_GET['month']) ? $_GET['month'] : date('m'));
+$year = (int) (!empty($_GET['year']) ? $_GET['year'] : date('Y'));
+
+/* select month control */
+$select_month_control = '';
+for($x = 1; $x <= 12; $x++) {
+	$select_month_control.= ''.date('F',mktime(0,0,0,$x,1,$year)).'';
+}
+$select_month_control.= '';
+
+/* select year control */
+$year_range = 7;
+$select_year_control = '';
+for($x = ($year-floor($year_range/2)); $x <= ($year+floor($year_range/2)); $x++) {
+	$select_year_control.= ''.$x.'';
+}
+$select_year_control.= '';
+
+/* "next month" control */
+$next_month_link = '<a href="$year + 1).' . '"rel="nofollow">Next Month >></a>';
+
+/* "previous month" control */
+$previous_month_link = '<a href="$year - 1).'. '" rel="nofollow"><< 	Previous Month</a>';
+
+
+/* bringing the controls together */
+$controls = ''.$select_month_control.$select_year_control.'       '.$previous_month_link.'     '.$next_month_link.' ';
+
+/* get all events for the given month */
+$events = array();
+$query = "SELECT title, DATE_FORMAT(date,'%Y-%m-%D') AS date FROM meeting WHERE date LIKE '$year-$month%' ";
+$result = mysql_query($query,$mysql) or die('cannot get results!');
+while($row = mysql_fetch_assoc($result)) {
+	$events[$row['date']][] = $row;
+
+}
+
+
+echo ''.date('F',mktime(0,0,0,$month,1,$year)).' '.$year.'';
+echo ''.$controls.'';
+echo '';
+echo draw_calendar($month,$year,$events);
+echo '';
