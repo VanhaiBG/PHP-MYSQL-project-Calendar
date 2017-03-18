@@ -1,5 +1,6 @@
 <?php
+$title = 'Профил';
 include('includes/header.php');
-?>
-<?php
+include('menu.php');
+logout();
 include('includes/footer.php');

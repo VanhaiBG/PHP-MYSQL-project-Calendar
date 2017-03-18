@@ -6,7 +6,9 @@
 	</head>
 	<body>
 <?php
-session_set_cookie_params('3600');
+session_name("mysession");
 session_start();
 include('includes/dbconnect.php');
-include('includes/form.php');
+include('includes/functions.php');
+?>
+<h1>Календар</h1>
