@@ -1,6 +1,7 @@
 <?php
 $title = 'Начало';
 include('includes/header.php');
+$redirect = "<a href='index.php'>Върнете се към формата.</a>";
 if (!empty($_POST['submit_login'])) {
 	$_SESSION['user_nickname'] = $_POST['user_nickname'];
 	$_SESSION['user_password'] = $_POST['user_password'];
@@ -14,13 +15,11 @@ if (!empty($_POST['submit_login'])) {
 			}
 		}
 		else {
-			echo "Въвели сте грешно потребителско име или парола!<br>
-					<a href='index.php'>Върнете се в началната страница.</a>";
+			echo "Въвели сте грешно потребителско име или парола!<br>$redirect";
 		}
 	}
 	else {
-		echo "Не сте въвели всички полета!<br>
-			<a href='index.php'>Върнете се в началната страница.</a>";
+		echo "Не сте въвели всички полета!<br>$redirect";
 	}
 }
 //Login form
@@ -52,13 +51,11 @@ else {
 			$count_nickname = strlen($user_nickname);
 			$count_password = strlen($user_password);
 			if ($count_nickname < 3 || $count_password < 6) {
-				echo "Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6!<br>
-					<a href='index.php'>Върнете се в началната страница.</a>";
+				echo "Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6!<br>$redirect";
 			}
 			//Check if the email is valid
 			elseif (filter_var($valid_email, FILTER_VALIDATE_EMAIL) === false) {
-				echo "Имейл адреса Ви е невалиден!<br>
-					<a href='index.php'>Върнете се в началната страница.</a>";
+				echo "Имейл адреса Ви е невалиден!<br>$redirect";
 			}
 			//Check for existing name and email
 			else {
@@ -67,8 +64,7 @@ else {
 				if (mysqli_num_rows($result) > 0) {
 					$row = mysqli_fetch_assoc($result);
 					if ($row['user_nickname'] == $user_nickname || $row['user_email'] == $user_email) {
-						echo "Името или имейла вече се използват!<br>
-							<a href='index.php'>Върнете се в началната страница.</a>";
+						echo "Името или имейла вече се използват!<br>$redirect";
 					}
 				}
 				//Successful registration
@@ -76,19 +72,17 @@ else {
 					$insert_query_register = "INSERT INTO `users`(`user_nickname`, `user_email`, `user_password`, `user_name`, `user_surname`, `user_sex`, `user_born`, `date_register`) VALUES ('$user_nickname', '$user_email', '$user_password', '$user_name', '$user_surname', '$user_sex', '$user_born', '$date')";
 					if (mysqli_query($connect, $insert_query_register)) {
 								echo "Успешна регистрация!<br>
-									Вече може да ползвате Вашето потребителско име (или имейл) и парола.<br><a href='index.php'>Върнете се в началната страница.</a>";
+									Вече може да ползвате Вашето потребителско име (или имейл) и парола.<br>$redirect";
 					}
 				}
 			}
 		}
 		else {
 			if ($user_password !== $user_password_repeat) {
-				echo "Паролата Ви не съвпада!<br>
-					<a href='index.php'>Върнете се в началната страница.</a>";
+				echo "Паролата Ви не съвпада!<br>$redirect";
 			}
 			else {
-				echo "Полетата със знак * са задължителни!<br>
-					<a href='index.php'>Върнете се в началната страница.</a>";
+				echo "Полетата със знак * са задължителни!<br>$redirect";
 			}
 		}
 	}
