@@ -1,15 +1,20 @@
 <?php
+//<input type="$type" name="$name" value="$value" placeholder="$placeholder">
 function input($type, $name, $value = NULL, $placeholder = NULL){
 	echo "<input type='".$type."' name='".$name."' value='". $value ."' placeholder='".$placeholder."'>";
 }
+
+//Logout (redirect to index.php)
 function logout() {
 	if (!isset($_SESSION['user_nickname'])) {
 		header('Location: index.php');
 	}
 	else {
-		echo "<a href='profile.php'>".$_SESSION['user_nickname']."</a> | <a href='logout.php'>Изход</a>";
+		echo "<a href='profile.php'>".$_SESSION['user_nickname']."</a> | <a href='logout.php'>Изход</a><br>";
 	}
 }
+
+//Calendar
 function draw_calendar($month,$year){
 	//Draw table
 	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
@@ -69,63 +74,45 @@ function draw_calendar($month,$year){
 	//All done, return result
 	return $calendar;
 }
+
+//Calendar name-month
 function date_month($month) {
 	switch ($month) {
-		case ($month == 1):
+		case 1:
 			echo "Януари";
 			break;
-		case ($month == 2):
+		case 2:
 			echo "Февруари";
 			break;
-		case ($month == 3):
+		case 3:
 			echo "Март";
 			break;
-		case ($month == 4):
+		case 4:
 			echo "Април";
 			break;
-		case ($month == 5):
+		case 5:
 			echo "Май";
 			break;
-		case ($month == 6):
+		case 6:
 			echo "Юни";
 			break;
-		case ($month == 7):
+		case 7:
 			echo "Юли";
 			break;
-		case ($month == 8):
+		case 8:
 			echo "Август";
 			break;
-		case ($month == 9):
+		case 9:
 			echo "Септември";
 			break;
-		case ($month == 10):
+		case 10:
 			echo "Октомври";
 			break;
-		case ($month == 11):
+		case 11:
 			echo "Ноември";
 			break;
-		case ($month == 12):
+		case 12:
 			echo "Декември";
 			break;
 	}
 }
-// function back_forward_calendar($month, $year) {
-// 	for ($i=0; $i < 10; $i++) {
-// 	if (isset($_GET['back'])) {
-// 		$month--;
-// 		if ($month < 1) {
-// 			$year--;
-// 		}
-// 		echo date_month($month)." $year";
-// 		echo draw_calendar($month, $year);
-// 	}
-// 	if (isset($_GET['forward'])) {
-// 		$month++;
-// 		if ($month > 12) {
-// 			$year++;
-// 		}
-// 		echo date_month($month)." $year";
-// 		echo draw_calendar($month, $year);
-// 	}
-// }
-// }

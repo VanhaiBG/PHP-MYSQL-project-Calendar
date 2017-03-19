@@ -13,7 +13,7 @@ if (isset($_SESSION['user_nickname'])) {
 	<li><a href="profile.php">Профил</a></li>
 </ul>
 <?php
-logout();
+	logout();
 }
 else {
 	logout();

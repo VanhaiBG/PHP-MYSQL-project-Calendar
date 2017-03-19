@@ -53,18 +53,11 @@ else {
 			$count_password = strlen($user_password);
 			if ($count_nickname < 3 || $count_password < 6) {
 				echo "Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6!<br>
-					Името или имейла вече се използват от друг потребител.<br>
-					Паролата Ви не съвпада.<br>
-					Полетата със знак * са задължителни.<br>
 					<a href='index.php'>Върнете се в началната страница.</a>";
 			}
 			//Check if the email is valid
 			elseif (filter_var($valid_email, FILTER_VALIDATE_EMAIL) === false) {
 				echo "Имейл адреса Ви е невалиден!<br>
-					Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6.<br>
-					Името или имейла вече се използват от друг потребител.<br>
-					Паролата Ви не съвпада.<br>
-					Полетата със знак * са задължителни.<br>
 					<a href='index.php'>Върнете се в началната страница.</a>";
 			}
 			//Check for existing name and email
@@ -74,10 +67,7 @@ else {
 				if (mysqli_num_rows($result) > 0) {
 					$row = mysqli_fetch_assoc($result);
 					if ($row['user_nickname'] == $user_nickname || $row['user_email'] == $user_email) {
-						echo "Името или имейла вече се ползват от друг потребител!<br>
-							Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6.<br>
-							Паролата Ви не съвпада.<br>
-							Полетата със знак * са задължителни.<br>
+						echo "Името или имейла вече се използват!<br>
 							<a href='index.php'>Върнете се в началната страница.</a>";
 					}
 				}
@@ -94,16 +84,10 @@ else {
 		else {
 			if ($user_password !== $user_password_repeat) {
 				echo "Паролата Ви не съвпада!<br>
-					Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6.<br>
-					Името или имейла вече се използват от друг потребител.<br>
-					Полетата със знак * са задължителни.<br>
 					<a href='index.php'>Върнете се в началната страница.</a>";
 			}
 			else {
 				echo "Полетата със знак * са задължителни!<br>
-					Паролата Ви не съвпада.<br>
-					Потребителското Ви име трябва да съдържа поне 3 символа, а паролата Ви поне 6.<br>
-					Името или имейла вече се използват от друг потребител.<br>
 					<a href='index.php'>Върнете се в началната страница.</a>";
 			}
 		}
@@ -115,7 +99,7 @@ else {
 <?php
 		echo "<h4>Регистрация</h4>";
 		input('text', 'user_nickname', '', 'Потребителско име*');
-		input('text', 'user_email', '', 'Електронна поща*');
+		input('text', 'user_email', '', 'Е-поща*');
 		input('password', 'user_password', '', 'Парола*');
 		input('password', 'user_password_repeat', '', 'Повтори паролата*');
 		input('text', 'user_name', '', 'Име');
@@ -124,6 +108,7 @@ else {
 		input('radio', 'user_sex', 'Мъж');
 		echo "Жена";
 		input('radio', 'user_sex', 'Жена');
+		echo "Рожденна дата";
 ?>
 		<select name="user_born_year">
 			<option value="0">година</option>
@@ -151,6 +136,7 @@ else {
 		</select>
 <?php
 		input('submit', 'submit_register', 'Регистрация');
+		input('reset', 'reset', 'Изчисти данните');
 ?>
 	</form>
 <?php
