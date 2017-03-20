@@ -1,7 +1,8 @@
+<link rel="stylesheet" type="text/css" href="assets/css/style.css?v=1.1">
 <?php
 //<input type="$type" name="$name" value="$value" placeholder="$placeholder">
-function input($type, $name, $value = NULL, $placeholder = NULL){
-	echo "<input type='".$type."' name='".$name."' value='". $value ."' placeholder='".$placeholder."'>";
+function input($type, $name, $value = NULL, $placeholder = NULL, $id = NULL){
+	echo "<input type='".$type."' name='".$name."' value='". $value ."' placeholder='".$placeholder."' id='".$id."' class='input'>";
 }
 
 //Logout (redirect to index.php)
@@ -10,7 +11,7 @@ function logout() {
 		header('Location: index.php');
 	}
 	else {
-		echo "<a href='profile.php'>".$_SESSION['user_nickname']."</a> | <a href='logout.php'>Изход</a><br>";
+		echo "<div class='loginform'>".$_SESSION['user_nickname']." | <a href='logout.php'>Изход</a></div><br>";
 	}
 }
 
@@ -43,10 +44,10 @@ function draw_calendar($month,$year){
 		$calendar .= '<td  class="calendar-day">';
 			//Add in the day number
 			if ($list_day==$today) {
-				$calendar.= '<div class="today"><a href="events.php">'.$today.'</a></div>';
+				$calendar.= '<div class="today"><a href="calendar.php?'.$today.'">'.$today.'</a></div>';
 			}
 			else {
-				$calendar.= '<div class="day-number"><a href="events.php">'.$list_day.'</a></div>';
+				$calendar.= '<div class="day-number"><a href="calendar.php?'.$list_day.'">'.$list_day.'</a></div>';
 			}
 		//QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY! IF MATCHES FOUND, PRINT THEM!
 		$calendar .= str_repeat('<p> </p>',2);
@@ -75,7 +76,7 @@ function draw_calendar($month,$year){
 	return $calendar;
 }
 
-//Calendar name-month
+//Calendar name on month
 function date_month($month) {
 	switch ($month) {
 		case 1:
@@ -114,5 +115,67 @@ function date_month($month) {
 		case 12:
 			echo "Декември";
 			break;
+	}
+}
+
+//Form for input events in calendar
+function form_events($url_string) {
+	echo '<form action="calendar.php?'.$url_string.'" method="post" class="input">';
+			input('text', 'event_name', '', 'Име на събитието*');
+			input('text', 'event_description', '', 'Описание');
+			input('submit', 'submit', 'Добави');
+	echo '</form>';
+}
+
+function flag($connect, $my_username, $date) {
+	$read_query = "SELECT `user_id` FROM `users` WHERE `user_nickname`='".$my_username."'";
+	$result = mysqli_query($connect, $read_query);
+	mysqli_num_rows($result);
+	$row_id = mysqli_fetch_assoc($result);
+	$select_query_views = "SELECT * FROM `events` WHERE `event_date`='$date' AND `user_id`='".$row_id['user_id']."' AND `date_deleted` IS NULL";
+	$result_views = mysqli_query($connect, $select_query_views);
+	mysqli_num_rows($result_views);
+	$row = mysqli_fetch_assoc($result_views);
+	$date_day = date('Y-m-d');
+	while ($row = mysqli_fetch_assoc($result_views)) {
+		if ($date_day == $row['event_date']) {
+			echo "ДНЕС";
+		}
+		elseif ($date_day > $row['event_date'] && $row['event_date']) {
+			echo "ПРЕДСТОИ";
+		}
+		else {
+			echo "НАБЛИЖАВА";
+		}
+	}
+}
+//View all events in calendar
+function events_view($connect, $date, $my_username, $flag) {
+	$read_query = "SELECT `user_id` FROM `users` WHERE `user_nickname`='".$my_username."'";
+	$result = mysqli_query($connect, $read_query);
+	mysqli_num_rows($result);
+	$row_id = mysqli_fetch_assoc($result);
+	$select_query_views = "SELECT * FROM `events` WHERE `date_deleted` IS NULL AND `user_id`='".$row_id['user_id']."'";
+	$result_views = mysqli_query($connect, $select_query_views);
+	if (mysqli_num_rows($result_views) > 0) {
+		echo "<table class='table input'>
+			<th>Име на събитието</th>
+			<th>Описание</th>
+			<th>Флаг на събитието</th>
+			<th>Дата на добавяне</th>
+			<th colspan='2'>Функции</th>";
+		while ($row = mysqli_fetch_assoc($result_views)) {
+			echo "<tr>
+					<td>".$row['event_name']."</td>
+					<td>".$row['event_description']."</td>
+					<td>".$flag."</td>
+					<td>".$row['date_add']."</td>
+					<td><a href='update.php?event_id=".$row['event_id']."'>Промени</a></td><td><a href='delete.php?event_id=".$row['event_id']."'>Изтрий</a></td>
+					</tr>";
+		}
+		echo "</table>";
+	}
+	else {
+		echo "<br><div class='input'>Нямате добавени събития в календара.</div>";
 	}
 }
